@@ -26,7 +26,7 @@
  
 - name: Configure chrony file Ubuntu
   template:
-    src: ntp.conf.j2
+    src: chrony.conf.j2
     dest: /etc/chrony/chrony.conf
   when: ansible_distribution == "Ubuntu"  
   notify: restart_chrony_ubuntu
