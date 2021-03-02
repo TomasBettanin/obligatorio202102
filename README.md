@@ -1,4 +1,4 @@
-#README.MD
+# READ ME
 Obligatorio del Taller de Linux 2021 -Ansible
 Este proyecto se basa la instalación de LAMP SIMPLE Y NTP (CHRONY) utilizando Roles.
 Contenido
