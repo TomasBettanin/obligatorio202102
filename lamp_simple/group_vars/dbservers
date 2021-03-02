@@ -2,8 +2,24 @@
 # The variables file used by the playbooks in the dbservers group.
 # These don't have to be explicitly imported by vars_files: they are autopopulated.
 
+#packages:
+#-mariadb-sever
+#-libselinux-python
+#-libsemanage-pyhton
+
+mariadb_packages:
+- mariadb-common
+- mariadb-server
+- python3-PyMySQL
+- python3-libsemanage
+- python3-libselinux
+
+
+
+
+
 mysqlservice: mysqld
-mysql_port: 3306
+mysql_port: '3306'
 dbuser: foouser
 dbname: foodb
-upassword: abc
+upassword: 'abc'

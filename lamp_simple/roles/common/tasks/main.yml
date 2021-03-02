@@ -1,26 +1,53 @@
 ---
 # This playbook contains common plays that will be run on all nodes.
+#instalamos python3-apt en ubutntu
+#Cambiamos yum por apt
+#Cambiamos ntp por chrony
 
-- name: Install ntp
-  yum:
-    name: ntp
+- name: Install chrony Ubuntu
+  apt:
+    name: chrony
     state: present
-  tags: ntp
+  when: ansible_distribution == 'Ubuntu'
+   
 
-- name: Configure ntp file
+- name: install chrony centos
+  yum:
+    name: chrony
+    state: present
+  when: ansible_distribution == 'CentOS' 
+
+- name: Configure chrony file CentOs
+  template:
+    src: chrony.conf.j2
+    dest: /etc/chrony.conf
+  when: ansible_distribution == "CentOS"
+  notify: restart_chrony_centos
+ 
+- name: Configure chrony file Ubuntu
   template:
     src: ntp.conf.j2
-    dest: /etc/ntp.conf
-  tags: ntp
-  notify: restart ntp
+    dest: /etc/chrony/chrony.conf
+  when: ansible_distribution == "Ubuntu"  
+  notify: restart_chrony_ubuntu
 
-- name: Start the ntp service
+
+- name: Start the chrony service Ubuntu
   service:
-    name: ntpd
+    name: chrony
     state: started
     enabled: yes
-  tags: ntp
+  when: ansible_distribution == "Ubuntu"
 
+
+- name: Start the chrony service Centos
+  service:
+    name: chronyd
+    state: started
+    enabled: yes
+  when: ansible_distribution == "CentOS"
+
+ 
 - name: test to see if selinux is running
   command: getenforce
   register: sestatus

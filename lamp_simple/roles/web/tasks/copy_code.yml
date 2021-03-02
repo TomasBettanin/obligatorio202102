@@ -2,12 +2,25 @@
 # These tasks are responsible for copying the latest dev/production code from
 # the version control system.
 
-- name: Copy the code from repository
-  git:
-    repo: "{{ repository }}"
-    dest: /var/www/html/
+#- name: Copy the code from repository
+#  git:
+#    repo: "{{ repository }}"
+#    dest: /var/www/html/
 
-- name: Creates the index.php file
+- name: Creates the index.php file Ubuntu
   template:
-    src: index.php.j2
+    src: inde.php.j2
     dest: /var/www/html/index.php
+    owner: root
+    group: root
+  notify: restart apache   
+  when: ansible_distribution == "Ubuntu"
+
+- name: Creates the index.php file Centos
+  template:
+    src: inde.php.j2
+    dest: /var/www/html/index.php
+    owner: root
+    group: root
+  notify: restart httpd
+  when: ansible_distribution == "CentOS"

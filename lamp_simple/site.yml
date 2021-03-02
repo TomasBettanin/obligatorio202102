@@ -2,22 +2,25 @@
 # This playbook deploys the whole application stack in this site.
 
 - name: apply common configuration to all nodes
+  become: yes
   hosts: all
-  remote_user: root
+  remote_user: ansible
 
   roles:
-    - common
+  - common
 
 - name: configure and deploy the webservers and application code
+  become: yes
   hosts: webservers
-  remote_user: root
+  remote_user: ansible
 
   roles:
-    - web
+   - web
 
 - name: deploy MySQL and configure the databases
+  become: yes
   hosts: dbservers
-  remote_user: root
+  remote_user: ansible
 
   roles:
-    - db
+   - db

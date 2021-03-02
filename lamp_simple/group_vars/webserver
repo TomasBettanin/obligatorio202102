@@ -1,0 +1,6 @@
+---
+packages:
+ -apache2
+ -php-mysql
+ -python3-selinux
+ -libselinux-python

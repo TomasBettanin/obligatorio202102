@@ -1,31 +1,47 @@
 ---
-# These tasks install http and the php modules.
-
 - name: Install http and php etc
   yum:
     name: "{{ item }}"
     state: present
-  with_items:
-   - httpd
-   - php
-   - php-mysql
-   - git
-   - libsemanage-python
-   - libselinux-python
+  loop: "{{ packages_centos }}" 
+  when: ansible_distribution == "CenOS" 
 
-- name: insert iptables rule for httpd
-  lineinfile:
-    dest: /etc/sysconfig/iptables
-    create: yes
-    state: present
-    regexp: "{{ httpd_port }}"
-    insertafter: "^:OUTPUT "
-    line: "-A INPUT -p tcp  --dport {{ httpd_port }} -j  ACCEPT"
-  notify: restart iptables
+- name: install apache Ubuntu
+  apt: 
+    name: "{{ item }}"
+    state: latest
+  loop: "{{ packages }}"
+  when: ansible_distribution == "Ubuntu"
+
+- name: Insert rule httpd ufw
+  ufw:
+    rule: allow
+    port: '80'
+    proto: tcp    
+  when: ansible_distribution == "Ubuntu"
+
+- name: insert rule httpd firewalld
+  firewalld:
+    service: httpd
+    permanent: true
+    state: enabled
+    immediate: yes
+  when: ansible_distribution == "CentOS"
+
+
+    #- name: insert iptables rule for httpd
+    #  lineinfile:
+    # dest: /etc/sysconfig/iptables
+    # create: yes
+    # state: present
+    # regexp: "{{ httpd_port }}"
+    # instertafter: "^:OUTPUT "
+    # line: "-A INPUT -p tcp --dport {{ httpd_port }} -j ACCEPT"
+    # notify: restart iptables
 
 - name: http service state
   service:
-    name: httpd
+    name: apache2
     state: started
     enabled: yes
 
@@ -35,3 +51,4 @@
     state: true
     persistent: yes
   when: sestatus.rc != 0
+  when: ansible_distribution == "CentOS"

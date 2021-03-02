@@ -1,6 +1,20 @@
 ---
 # Variables listed here are applicable to all host groups
 
-httpd_port: 80
+#httpd_port: 80
+
+packages:
+- apache2
+- php
+- php-mysql
+- python3-selinux
+
+packages_centos:
+- httpd
+- php
+- php-mysql
+- python3-libsemanage
+- python3-libselinux
+
 ntpserver: 192.168.1.2
 repository: https://github.com/bennojoy/mywebapp.git
