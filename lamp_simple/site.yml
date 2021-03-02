@@ -6,8 +6,8 @@
   hosts: all
   remote_user: ansible
 
- roles:
-  - common
+  roles:
+   - common
 
 - name: configure and deploy the webservers and application code
   become: yes

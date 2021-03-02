@@ -2,11 +2,7 @@
 # The variables file used by the playbooks in the dbservers group.
 # These don't have to be explicitly imported by vars_files: they are autopopulated.
 
-#packages:
-#-mariadb-sever
-#-libselinux-python
-#-libsemanage-pyhton
-
+#Paquetes para mariadb Centos
 mariadb_packages:
 - mariadb-common
 - mariadb-server
@@ -14,16 +10,18 @@ mariadb_packages:
 - python3-libsemanage
 - python3-libselinux
 
+#Paquetes para mariadb ubuntu
 mariadb_packages_ubuntu:
 - mariadb-common
 - mariadb-server
 - python3-PyMySQL
 
 
-
-
+#Iptables centos
 mysqlservice: mysqld
 mysql_port: '3306'
+
+#Aplication db
 dbuser: foouser
 dbname: foodb
 upassword: 'abc'
