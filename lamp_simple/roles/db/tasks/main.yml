@@ -1,17 +1,25 @@
 ---
 #This playbook will install mariadb and create db user and give permissions.
 
-- name: Install Mariadb package
+- name: Install Mariadb package Centos
   yum:
     name: "{{ item }}"
     state: latest
   loop: "{{ mariadb_packages }}"
+  when: ansible_distribution == "CentOS"
+
+- name: Install Mariadb package Ubuntu
+  apt:
+    state: latest
+    loop: "{{ mariadb_packages_ubuntu }}" 
+  when: ansible_distribution == "Ubuntu" 
 
 - name: Configure SELinux to start mysql on any port
   seboolean:
     name: mysql_connect_any
     state: true
     persistent: yes
+  when: ansible_distribution == "CentOS"
    
 - name: Create Mysql configuration file
   template:
@@ -33,6 +41,15 @@
     insertafter: "^:OUTPUT "
     line: "-A INPUT -p tcp  --dport {{ mysql_port }} -j  ACCEPT"
   notify: restart iptables
+  when: ansible_distribution == "CentOS"
+
+- name: Insert ufw rule
+  ufw:
+    rule: allow       
+    port: '3306'
+    proto: tcp
+  when: ansible_distribution == "Ubuntu"
+
     
 - name: Create Application Database
   mysql_db:
